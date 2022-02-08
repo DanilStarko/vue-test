@@ -23,6 +23,9 @@ module.exports = {
   /*
   ** Build configuration
   */
+  plugins: [
+    { src: '~/plugins/CustomScroll.js', mode: 'client' },
+  ],
   modules: [
     '@nuxtjs/axios',
   ],
