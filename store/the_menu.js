@@ -5,12 +5,19 @@ export default {
   state() {
     return {
       menu: [],
-      menu_is_visible: false,
+      isVisibleMenu: false,
     };
   },
   mutations: {
     SET_MENU(state, menu) {
       Vue.set(state, 'menu', menu);
     },
+    SET_IS_VISIBLE_MENU(state) {
+      state.isVisibleMenu = !state.isVisibleMenu;
+    },
+  },
+  getters: {
+    menuList: (state) => state.menu ?? [],
+    isVisibleMenu: (state) => state.isVisibleMenu,
   },
 };

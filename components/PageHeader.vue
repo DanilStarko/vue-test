@@ -25,8 +25,8 @@
         <a href="/"><img src="/logo.png" alt="ГдеМатериал.Ру"></a> <!--TODO(iNerV) do dynamically link-->
       </div>
       <div class="main-navigation__burger">
-        <button class="main-navigation__open-menu-btn">
-          Menu
+        <button class="main-navigation__open-menu-btn" @click="toggleMenu">
+          {{ isVisibleMenu ? 'Close' : 'Menu' }}
         </button>
       </div>
       <div class="main-navigation__search">
@@ -41,67 +41,36 @@
         </li>
       </ul>
     </nav>
-    <ul class="site-navigation">
-      <li class="site-navigation__item">
-        <a class="site-navigation__link" href="/">Category</a>
-      </li>
-      <li class="site-navigation__item">
-        <a class="site-navigation__link" href="/">Category2</a>
-      </li>
-      <li class="site-navigation__item">
-        <a class="site-navigation__link" href="/">Category3</a>
-      </li>
-      <li class="site-navigation__item">
-        <a class="site-navigation__link" href="/">Category4</a>
-      </li>
-      <li class="site-navigation__item">
-        <a class="site-navigation__link" href="/">Category5</a>
-      </li>
-      <li class="site-navigation__item">
-        <a class="site-navigation__link" href="/">Category6</a>
-      </li>
-      <li class="site-navigation__item">
-        <a class="site-navigation__link" href="/">Category7</a>
-      </li>
-      <li class="site-navigation__item">
-        <a class="site-navigation__link" href="/">Category8</a>
-      </li>
-      <li class="site-navigation__item">
-        <a class="site-navigation__link" href="/">Category9</a>
-      </li>
-      <li class="site-navigation__item">
-        <a class="site-navigation__link" href="/">Category10</a>
-      </li>
-      <li class="site-navigation__item">
-        <a class="site-navigation__link" href="/">Category11</a>
-      </li>
-      <li class="site-navigation__item">
-        <a class="site-navigation__link" href="/">Category12</a>
-      </li>
-      <li class="site-navigation__item">
-        <a class="site-navigation__link" href="/">Category13</a>
-      </li>
-      <li class="site-navigation__item">
-        <a class="site-navigation__link" href="/">Category14</a>
-      </li>
-      <li class="site-navigation__item">
-        <a class="site-navigation__link" href="/">Category15</a>
-      </li>
-      <li class="site-navigation__item">
-        <a class="site-navigation__link" href="/">Category16</a>
-      </li>
-    </ul>
+    <MenuList :class="{'active': isVisibleMenu}" />
   </header>
 </template>
 
 <script>
+import { mapGetters, mapMutations } from 'vuex';
+import MenuList from './Menu/MenuList';
+
 export default {
   name: 'PageHeader',
+  components: { MenuList },
+  computed: {
+    ...mapGetters('the_menu', ['isVisibleMenu']),
+  },
+  methods: {
+    ...mapMutations('the_menu', ['SET_IS_VISIBLE_MENU']),
+    toggleMenu() {
+      this.SET_IS_VISIBLE_MENU();
+      document.querySelector('body').classList.toggle('lock');
+    },
+  },
 };
 </script>
 
 <style lang="scss" scoped>
 @import "~assets/variables.scss";
+
+.header {
+  position: relative;
+}
 
 .top-bar {
   display: flex;
@@ -113,6 +82,7 @@ export default {
   line-height: 19px;
   padding: .25rem 1rem;
   z-index: 2;
+  position: relative;
 
   &__info {
     font-weight: 900;
@@ -153,8 +123,9 @@ export default {
   padding-bottom: 1rem;
   background-color: rgb(130, 0, 255);
   color: rgb(255, 255, 255);
-  z-index: 1;
+  z-index: 2;
   line-height: 2.5rem;
+  position: relative;
 
   @media (min-width: $screen-md) {
     grid-template-areas: "logo burger search user-box";
@@ -176,6 +147,7 @@ export default {
     position: relative;
     color: rgb(255, 255, 255);
     z-index: 1;
+    cursor: pointer;
   }
 
   &__search {
@@ -208,80 +180,6 @@ export default {
 
   &__item:not(:first-child) {
     margin-left: 15px;
-  }
-}
-
-.site-navigation {
-  display: flex;
-  flex-direction: column;
-  grid-area: site-navigation;
-  list-style-type: none;
-  width: 100%;
-  height: calc(100vh - 153px);
-  background: rgb(255, 255, 255);
-  overflow-y: scroll;
-  z-index: 1;
-  padding-left: 0;
-  display: none;
-
-  &__item {
-    display: block;
-    width: 100%;
-    height: 47px;
-    position: relative;
-    color: #333;
-    padding: .75rem 1rem;
-
-    &:hover,
-    &:active {
-      background-color: rgb(130, 0, 255);
-      color: rgb(255, 255, 255);
-    }
-  }
-
-  &__grid {
-    display: grid;
-    grid-template-rows: 90px 90px;
-    grid-template-columns: 1fr 1fr;
-    align-items: center;
-    list-style-type: none;
-    padding: 0;
-  }
-
-  &__grid-item {
-    display: flex;
-    align-items: center;
-    position: relative;
-    height: 100%;
-    text-align: center;
-    color: rgb(130, 0, 255);
-    border-right: 1px solid #ccc;
-    border-bottom: 1px solid #ccc;
-  }
-
-  &__link {
-    display: block;
-    width: 100%;
-    color: inherit;
-
-    &:hover,
-    &:active {
-      color: rgb(255, 255, 255);
-    }
-
-    &--special {
-      display: flex;
-      align-items: center;
-      position: absolute;
-      padding-left: 50%;
-      left: -10%;
-      height: 100%;
-
-      &:hover,
-      &:active {
-        color: inherit;
-      }
-    }
   }
 }
 </style>
